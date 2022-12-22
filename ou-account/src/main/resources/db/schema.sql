@@ -1,3 +1,13 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+CREATE TABLE country
+(
+  id UUID PRIMARY KEY DEFAULT (uuid_generate_v1()) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  iso3 VARCHAR(3) NOT null unique
+)INHERITS (thing);
+
 CREATE TABLE company
 (
   id UUID PRIMARY KEY DEFAULT (uuid_generate_v1()) NOT NULL,
@@ -38,9 +48,27 @@ ALTER TABLE user_detail
  ALTER TABLE user_detail
   ADD FOREIGN KEY (company) REFERENCES company (id);
 
-CREATE TABLE country
+ 
+ CREATE TABLE role
 (
   id UUID PRIMARY KEY DEFAULT (uuid_generate_v1()) NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  iso3 VARCHAR(3) NOT null unique
+  name VARCHAR(255) NOT null unique
 )INHERITS (thing);
+
+ CREATE TABLE user_role
+(
+  id UUID PRIMARY KEY DEFAULT (uuid_generate_v1()) NOT NULL,
+  ou_user UUID NOT null,
+  role UUID NOT null
+)INHERITS (thing);
+
+ALTER TABLE user_role
+  ADD FOREIGN KEY (ou_user) REFERENCES ou_user (id);
+ 
+ ALTER TABLE user_role
+  ADD FOREIGN KEY (role) REFERENCES role (id);
+
+
+
+
+

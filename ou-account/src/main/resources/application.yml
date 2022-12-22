@@ -24,3 +24,6 @@ spring:
             leak-detection-threshold: 1000
             pool-name: VAPPOOL
             max-lifetime: 2000000
+            
+ou_account:
+    admin_role: ADMIN

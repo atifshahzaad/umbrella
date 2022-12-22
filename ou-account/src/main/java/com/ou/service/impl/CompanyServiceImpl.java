@@ -9,13 +9,18 @@ import org.springframework.stereotype.Service;
 import com.ou.dto.CreateCompanyDTO;
 import com.ou.model.Company;
 import com.ou.model.Country;
+import com.ou.model.Role;
 import com.ou.model.User;
 import com.ou.model.UserDetail;
+import com.ou.model.UserRole;
 import com.ou.repository.CompanyRepository;
 import com.ou.service.CompanyService;
 import com.ou.service.CountryService;
+import com.ou.service.RoleService;
 import com.ou.service.UserDetailService;
+import com.ou.service.UserRoleService;
 import com.ou.service.UserService;
+import com.ou.util.OuAccountUtil;
 
 import jakarta.transaction.Transactional;
 
@@ -38,6 +43,12 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	@Autowired
 	private UserDetailService userDetailService;
+	
+	@Autowired
+	private RoleService roleService;
+	
+	@Autowired
+	private UserRoleService userRoleService;
 	
 	@Override
 	@Transactional
@@ -63,6 +74,12 @@ public class CompanyServiceImpl implements CompanyService {
 		userDetailService.create(userDetail);
 		
 		LOGGER.info("user detail is created");
+		
+		Role role = roleService.findByNameForReference(OuAccountUtil.ADMIN_ROLE);
+		
+		UserRole userRole = new UserRole(persistedUser, role);
+		userRoleService.create(userRole);
+		
 		LOGGER.info("company creation ended");
 		
 		return insertedCompany;
