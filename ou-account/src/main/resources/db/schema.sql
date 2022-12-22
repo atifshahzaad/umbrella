@@ -1,6 +1,12 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
+CREATE TABLE thing
+(
+  created_at TIMESTAMP DEFAULT now() NOT NULL,
+  updated_at TIMESTAMP DEFAULT now() NOT NULL
+);
+
 CREATE TABLE country
 (
   id UUID PRIMARY KEY DEFAULT (uuid_generate_v1()) NOT NULL,

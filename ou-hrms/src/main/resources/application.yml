@@ -1,9 +1,9 @@
 server:
-    port: 9090
+    port: 9091
 
 spring:
     application:
-      name: ou-account
+      name: ou-hrms
     jpa:
       properties:
 #        hibernate.show_sql: true
@@ -15,7 +15,7 @@ spring:
                 batch_size: 10
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:5432/ou_account
+        url: jdbc:postgresql://localhost:5432/ou_hrms
         password: postgres
         username: postgres
         hikari:
@@ -31,6 +31,3 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-            
-ou_account:
-    admin_role: ADMIN
