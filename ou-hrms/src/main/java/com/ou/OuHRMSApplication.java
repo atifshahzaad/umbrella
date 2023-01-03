@@ -2,15 +2,12 @@ package com.ou;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-@EnableFeignClients
-public class OuAccountApplication {
+public class OuHRMSApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OuAccountApplication.class, args);
-
+		SpringApplication.run(OuHRMSApplication.class, args);
 	}
 
 }

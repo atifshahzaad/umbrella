@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ou.dto.AddUserDTO;
 import com.ou.dto.CreateCompanyDTO;
 import com.ou.model.Company;
 import com.ou.service.CompanyService;
@@ -17,7 +18,7 @@ import com.ou.service.CompanyService;
 @RestController
 @RequestMapping("oua/api/v1/company")
 public class CompanyController {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyController.class);
 
 	@Autowired
@@ -25,13 +26,20 @@ public class CompanyController {
 
 	@PostMapping
 	public ResponseEntity<Company> create(@RequestBody CreateCompanyDTO dto) {
-		
+
 		LOGGER.info("starting company creation");
-		
+
 		Company company = companyService.create(dto);
-		
+
 		LOGGER.info("company is created send the response");
-		
+
 		return new ResponseEntity<Company>(company, HttpStatus.CREATED);
+	}
+
+	@PostMapping("/user")
+	public ResponseEntity<Void> addUser(@RequestBody AddUserDTO dto) {
+		companyService.addUser(dto);
+		return ResponseEntity.created(null).build();
+
 	}
 }

@@ -8,11 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.ou.model.Company;
+import com.ou.model.Country;
 
 @Repository
-public interface CompanyRepository extends JpaRepository<Company, UUID>{
+public interface CountryRepository extends JpaRepository<Country, UUID>{
 
-	@Query("SELECT new com.ou.model.Company(c.id) FROM Company c WHERE c.id=:id")
-	Optional<Company> findCompanyByIdForReference(@Param("id") UUID id);
+	@Query("SELECT new com.ou.model.Country(c.id) FROM Country c WHERE c.id=:id")
+	Optional<Country> findByIdForReference(@Param("id") UUID id);
 }

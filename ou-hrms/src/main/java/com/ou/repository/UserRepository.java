@@ -8,11 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.ou.model.Company;
+import com.ou.model.User;
 
 @Repository
-public interface CompanyRepository extends JpaRepository<Company, UUID>{
+public interface UserRepository extends JpaRepository<User, UUID>{
 
-	@Query("SELECT new com.ou.model.Company(c.id) FROM Company c WHERE c.id=:id")
-	Optional<Company> findCompanyByIdForReference(@Param("id") UUID id);
+	@Query("SELECT new com.ou.model.User(u.id) FROM User u WHERE u.id=:id")
+	Optional<User> findByIdForReference(@Param("id") UUID id);
 }
