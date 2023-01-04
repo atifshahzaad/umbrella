@@ -26,6 +26,16 @@ spring:
             leak-detection-threshold: 1000
             pool-name: OUPOOL
             max-lifetime: 2000000
+    kafka:
+      bootstrap-servers: localhost:8097, localhost:8098, localhost:8099
+      template:
+        default-topic: ou-user-created
+      properties:
+      #Server host name verification is disabled by setting ssl.endpoint.identification.algorithm to an empty string
+        ssl.endpoint.identification.algorithm:
+      producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
  
 feign:
     client:
@@ -42,3 +52,5 @@ eureka:
             
 ou_account:
     admin_role: ADMIN
+    topic:
+      userCreated: ou-user-created

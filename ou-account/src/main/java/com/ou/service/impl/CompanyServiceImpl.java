@@ -6,24 +6,25 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.dto.AddUserDTO;
 import com.ou.dto.CreateCompanyDTO;
+import com.ou.event.UserCreatedEvent;
 import com.ou.exceptions.ResourceNotFoundException;
+import com.ou.integration.HRMSService;
 import com.ou.model.Company;
 import com.ou.model.Country;
 import com.ou.model.Role;
 import com.ou.model.User;
 import com.ou.model.UserDetail;
 import com.ou.model.UserRole;
-import com.ou.proxy.ouhrms.HrmsUserService;
 import com.ou.proxy.ouhrms.dto.CreateUserDTO;
 import com.ou.repository.CompanyRepository;
 import com.ou.service.CompanyService;
 import com.ou.service.CountryService;
+import com.ou.service.HRMSEventService;
 import com.ou.service.RoleService;
 import com.ou.service.UserDetailService;
 import com.ou.service.UserRoleService;
@@ -58,7 +59,10 @@ public class CompanyServiceImpl implements CompanyService {
 	private UserRoleService userRoleService;
 
 	@Autowired
-	private HrmsUserService hrmsUserService;
+	private HRMSService hrmsService;
+	
+	@Autowired
+	private HRMSEventService hrmsEventService;
 
 	@Override
 	@Transactional
@@ -92,12 +96,22 @@ public class CompanyServiceImpl implements CompanyService {
 
 		LOGGER.info("company creation ended");
 
-		CreateUserDTO cDto = new CreateUserDTO();
-		cDto.setId(persistedUser.getId());
-
-		ResponseEntity<Void> response = hrmsUserService.create(cDto);
-
-		System.out.println("############################# " + response.getStatusCode() + " ######################");
+		UserCreatedEvent event = UserCreatedEvent
+				.builder()
+				.id(persistedUser.getId())
+				.build();
+		
+		hrmsEventService.sendUserCreatedEvent(event);
+		
+//		CreateUserDTO cDto = new CreateUserDTO();
+//		cDto.setId(persistedUser.getId());
+//		boolean response = hrmsService.createUser(cDto);
+//		if(!response) {
+//			LOGGER.info("Saving HRMS creating user failure");
+//		} else {
+//			LOGGER.info("HRMS created user successfully");
+//		}
+		
 
 		return persistedCompany;
 	}
@@ -126,11 +140,14 @@ public class CompanyServiceImpl implements CompanyService {
 		UserRole userRole = new UserRole(persistedUser, role);
 		userRoleService.create(userRole);
 		
-		CreateUserDTO cDto = new CreateUserDTO(persistedUser.getId(), dto.getSupervisior());
-
-		ResponseEntity<Void> response = hrmsUserService.create(cDto);
+		UserCreatedEvent event = UserCreatedEvent
+				.builder()
+				.id(persistedUser.getId())
+				.supervisor(dto.getSupervisior())
+				.build();
 		
-		System.out.println("############################# " + response.getStatusCode() + " ######################");
+		hrmsEventService.sendUserCreatedEvent(event);
+		
 
 	}
 

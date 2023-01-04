@@ -1,5 +1,5 @@
 server:
-    port: 9091
+    port: 9093
 
 spring:
     application:
@@ -26,9 +26,25 @@ spring:
             leak-detection-threshold: 1000
             pool-name: OUPOOL
             max-lifetime: 2000000
-
+    kafka:
+      bootstrap-servers: localhost:8097, localhost:8098, localhost:8099
+      template:
+        default-topic: ou-user-created
+      properties:
+      #Server host name verification is disabled by setting ssl.endpoint.identification.algorithm to an empty string
+        ssl.endpoint.identification.algorithm:
+      consumer:
+        group-id: ou-hrms
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+        properties:
+            spring.json.trusted.packages: "*"
             
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+      
+ou_hrms:
+    topic:
+      userCreated: ou-user-created
