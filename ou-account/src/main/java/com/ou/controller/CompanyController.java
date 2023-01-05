@@ -39,10 +39,7 @@ public class CompanyController {
 	@PostMapping("/user")
 	public ResponseEntity<Void> addUser(@RequestBody AddUserDTO dto) {
 		companyService.addUser(dto);
-		for(int i=0; i<10000; i++) {
-			dto.setEmail("abc.gg@tou" + i + ".com");
-			companyService.addUser(dto);
-		}
 		return ResponseEntity.created(null).build();
 	}
+	
 }

@@ -2,6 +2,8 @@ package com.ou.model;
 
 import java.io.Serializable;
 
+import com.ou.dto.UserInfoDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -34,9 +36,18 @@ public class User extends Thing implements Serializable {
 	@Column(name="profile_picture", nullable = true)
 	private String picture;
 	
-	public User(String email, String password) {
+	@Column(name="first_login")
+	private boolean firstLogin;
+	
+	public User(String email) {
 		this.email = email;
-		this.password = password;
+	}
+	
+	public void copyFromUserInfoDTO(UserInfoDTO dto) {
+		this.firstName = dto.getFirstName();
+		this.middleName = dto.getMiddleName();
+		this.lastName = dto.getLastName();
+		this.password = dto.getPassword();
 	}
 
 }

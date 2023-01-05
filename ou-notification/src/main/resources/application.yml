@@ -1,13 +1,12 @@
 server:
-    port: 9091
+    port: 9095
 
 spring:
     application:
-      name: ou-hrms
+      name: ou-notification
     jpa:
       properties:
 #        hibernate.show_sql: true
-        hibernate.default-schema: ggh_vap
         hibernate:
             generate_statistics: false
             order_inserts: true
@@ -15,7 +14,7 @@ spring:
                 batch_size: 10
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:5432/ou_hrms
+        url: jdbc:postgresql://localhost:5432/ou_notification
         password: postgres
         username: postgres
         hikari:
@@ -28,23 +27,33 @@ spring:
             max-lifetime: 2000000
     kafka:
       bootstrap-servers: localhost:8097, localhost:8098, localhost:8099
-      template:
-        default-topic: ou-user-created
       properties:
       #Server host name verification is disabled by setting ssl.endpoint.identification.algorithm to an empty string
         ssl.endpoint.identification.algorithm:
       consumer:
-        group-id: ou-hrms
+        group-id: ou-notification
         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
         properties:
             spring.json.trusted.packages: "*"
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: 
+      password: 
+      protocol: smtp
+      tls: true
+      properties.mail.smtp:
+        auth: true
+        starttls.enable: true
+        ssl.trust: smtp.gmail.com
+
             
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
       
-ou_hrms:
+ou_notification:
     topic:
       userCreated: ou-user-created

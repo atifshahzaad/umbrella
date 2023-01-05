@@ -127,9 +127,8 @@ public class CompanyServiceImpl implements CompanyService {
 	public void addUser(AddUserDTO dto) {
 
 		Company company = this.findCompanyByIdForReference(dto.getCompany());
-		String password = OuAccountUtil.generateRandomPassword();
 
-		User user = new User(dto.getEmail(), password);
+		User user = new User(dto.getEmail());
 		User persistedUser = userService.create(user);
 		
 		UserDetail userDetail = new UserDetail(persistedUser, company);
@@ -143,6 +142,8 @@ public class CompanyServiceImpl implements CompanyService {
 		UserCreatedEvent event = UserCreatedEvent
 				.builder()
 				.id(persistedUser.getId())
+				.email(persistedUser.getEmail())
+				.name(persistedUser.getFirstName() + " " + persistedUser.getMiddleName() + " " + persistedUser.getLastName())
 				.supervisor(dto.getSupervisior())
 				.build();
 		

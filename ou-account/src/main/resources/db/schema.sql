@@ -73,6 +73,9 @@ ALTER TABLE user_role
  
  ALTER TABLE user_role
   ADD FOREIGN KEY (role) REFERENCES role (id);
+ 
+ 
+ alter table ou_user add column first_login boolean default true;
 
 
 

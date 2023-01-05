@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 public class UserCreatedEvent {
 
 	private UUID id;
+	private String name;
+	private String email;
 	private UUID supervisor;
 	private LocalDate joiningDate;
 	
