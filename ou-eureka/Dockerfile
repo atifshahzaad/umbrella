@@ -9,8 +9,8 @@ COPY src src
 RUN --mount=type=cache,target=/root/.m2 ./mvnw install -DskipTests
 
 ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} target/ou-hrms-0.0.1-SNAPSHOT.jar
-RUN java -Djarmode=layertools -jar target/ou-hrms-0.0.1-SNAPSHOT.jar extract --destination target/extracted
+COPY ${JAR_FILE} target/ou-eureka-0.0.1-SNAPSHOT.jar
+RUN java -Djarmode=layertools -jar target/ou-eureka-0.0.1-SNAPSHOT.jar extract --destination target/extracted
 
 FROM eclipse-temurin:17-jdk-alpine
 #RUN addgroup -S ou && adduser -S ou -G ou
