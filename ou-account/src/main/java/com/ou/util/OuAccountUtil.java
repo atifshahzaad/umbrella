@@ -21,5 +21,10 @@ public class OuAccountUtil {
 		String[] arr = text.split("-");
 		return arr[arr.length - 1];
 	}
+	
+	public static UUID getId(String subject) {
+		String[] split = subject.split(":");
+		return UUID.fromString(split[split.length - 1]);
+	}
 
 }

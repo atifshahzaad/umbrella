@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,14 +14,12 @@ import com.ou.dto.AddUserDTO;
 import com.ou.dto.CreateCompanyDTO;
 import com.ou.event.UserCreatedEvent;
 import com.ou.exceptions.ResourceNotFoundException;
-import com.ou.integration.HRMSService;
 import com.ou.model.Company;
 import com.ou.model.Country;
 import com.ou.model.Role;
 import com.ou.model.User;
 import com.ou.model.UserDetail;
 import com.ou.model.UserRole;
-import com.ou.proxy.ouhrms.dto.CreateUserDTO;
 import com.ou.repository.CompanyRepository;
 import com.ou.service.CompanyService;
 import com.ou.service.CountryService;
@@ -57,12 +56,12 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	private UserRoleService userRoleService;
-
-	@Autowired
-	private HRMSService hrmsService;
 	
 	@Autowired
 	private HRMSEventService hrmsEventService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	@Transactional
@@ -79,6 +78,7 @@ public class CompanyServiceImpl implements CompanyService {
 		LOGGER.info("start creating user");
 
 		User user = modelMapper.map(dto, User.class);
+		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		User persistedUser = userService.create(user);
 
 		LOGGER.info("user is created");

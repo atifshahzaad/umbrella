@@ -39,8 +39,8 @@ spring:
     mail:
       host: smtp.gmail.com
       port: 587
-      username: 
-      password: 
+      username: hcc.hukam@gmail.com
+      password: gbpcwpnaeporviyw
       protocol: smtp
       tls: true
       properties.mail.smtp:

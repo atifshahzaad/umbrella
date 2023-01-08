@@ -17,7 +17,7 @@ public class OuAccountConfig {
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
-
+	
 	@Bean
 	public NewTopic newTopic() {
 		return TopicBuilder.name(userCreatedTopic)

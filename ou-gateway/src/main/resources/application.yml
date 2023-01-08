@@ -1,0 +1,16 @@
+server:
+    port: 9098
+
+spring:
+    application:
+      name: ou-gateway
+    security:
+      oauth2:
+        resourceserver:
+          jwt:
+            issuer-uri: http://localhost:8080/realms/umbrella
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

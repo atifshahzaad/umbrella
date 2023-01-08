@@ -17,6 +17,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ou.exceptions.InvalidCredentialsException;
 import com.ou.exceptions.InvalidOperationException;
 import com.ou.exceptions.ResourceNotFoundException;
 
@@ -73,6 +74,20 @@ public class OuAcountControllerAdvisor extends ResponseEntityExceptionHandler {
 		response.setErrors(Collections.emptyList());
 		
 		return new ResponseEntity<RequestBodyInvalidErrorResponse>(response, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(InvalidCredentialsException.class)
+	public ResponseEntity<RequestBodyInvalidErrorResponse> handleInvalidCredentialsException(
+			InvalidCredentialsException ex, WebRequest request) {
+
+		RequestBodyInvalidErrorResponse response = new RequestBodyInvalidErrorResponse();
+
+		response.setTimestamp(LocalDateTime.now());
+		response.setStatus(HttpStatus.UNAUTHORIZED);
+		response.setMessage(ex.getMessage());
+		response.setErrors(Collections.emptyList());
+		
+		return new ResponseEntity<RequestBodyInvalidErrorResponse>(response, HttpStatus.UNAUTHORIZED);
 	}
 	
 	@Data
