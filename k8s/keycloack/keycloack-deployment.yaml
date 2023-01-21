@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloack
+  template:
+    metadata:
+      labels:
+        app: keycloack
+    spec:
+      containers:
+        - name: keycloack
+          image: ou-keycloack
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: KC_DB
+              value: postgres
+            - name: KC_DB_URL
+              value: jdbc:postgresql://postgres:5432/ou_keycloack
+            - name: KC_DB_USERNAME
+              value: postgres
+            - name: KC_DB_PASSWORD
+              value: postgres
+            - name: KC_HOSTNAME
+              value: localhost
+            - name: KEYCLOAK_ADMIN
+              value: admin
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: admin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloack
+  labels:
+    app: keycloack
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    nodePort: 30032
+    targetPort: 8080
+    name: keycloack
+  selector:
+    app: keycloack

@@ -36,8 +36,8 @@ public class User extends Thing implements Serializable {
 	@Column(name="profile_picture", nullable = true)
 	private String picture;
 	
-	@Column(name="first_login")
-	private boolean firstLogin;
+	@Column(name="reg_completed")
+	private boolean regCompleted;
 	
 	public User(String email) {
 		this.email = email;

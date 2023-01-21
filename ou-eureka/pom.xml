@@ -12,6 +12,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2022.0.0</spring-cloud.version>
+		<start-class>com.ou.OUEurekaApplication</start-class>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -30,4 +31,24 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.ou.OUEurekaApplication</mainClass>
+					<layout>JAR</layout>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

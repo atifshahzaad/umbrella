@@ -30,13 +30,21 @@ public class UserServiceImpl implements UserService {
 		Optional<User> optionalUser = userRepository.findById(userId);
 		User user = optionalUser.orElseThrow( () -> new ResourceNotFoundException("User not found for provided id: " + userId.toString()));
 		
+		if(user.isRegCompleted()) {
+			throw new InvalidOperationException("User regestration is completed");
+		}
+		
 		if(user.getPassword() != null && !user.getPassword().isBlank()) {
 			throw new InvalidOperationException("User password is already set");
 		}
 		
 		user.copyFromUserInfoDTO(dto);
 		
-		return userRepository.save(user);
+		user = userRepository.save(user);
+		
+		user.setRegCompleted(true);
+		
+		return user;
 	}
 
 }

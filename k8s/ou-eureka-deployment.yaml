@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ou-eureka-cm
+data:
+  eureka_service_address: http://ou-eureka-0.ou-eureka:8761/eureka,http://ou-eureka-1.ou-eureka:8761/eureka,http://ou-eureka-2.ou-eureka:8761/eureka
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka-np
+  labels:
+    app: ou-eureka
+spec:
+  type: NodePort
+  ports:
+  - port: 8761
+    nodePort: 30030
+    targetPort: 8761
+    name: ou-eureka
+  selector:
+    app: ou-eureka
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ou-eureka
+  labels:
+    app: ou-eureka
+spec:
+  clusterIP: None
+  ports:
+  - port: 8761
+    name: ou-eureka
+  selector:
+    app: ou-eureka
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ou-eureka
+spec:
+  serviceName: ou-eureka
+  # n instances
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ou-eureka
+  template:
+    metadata:
+      labels:
+        app: ou-eureka
+    spec:
+      containers:
+      - name: ou-eureka
+        image: ou-eureka
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8761
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "1200Mi"
+            cpu: "500m"
+        env:
+        - name: EUREKA_SERVER_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              name: ou-eureka-cm
+              key: eureka_service_address
+        - name: ENVIRONMENT
+          value: "prod"
+        - name: JVM_OPTS
+          value: "-Xms1g -Xmx1g"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8761
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8761
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
