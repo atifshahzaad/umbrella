@@ -15,25 +15,24 @@ public class HRMSService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(HRMSService.class);
 
-	@Autowired
-	private HrmsProxy hrmsProxy;
-
-	public boolean createUser(CreateUserDTO dto) {
-
-		LOGGER.info("Sending create user request to HRMS");
-
-		try {
-			ResponseEntity<Void> response = hrmsProxy.create(dto);
-
-			LOGGER.info("Recived HRMS create user response with status code: " + response.getStatusCode());
-
-			if (response.getStatusCode().equals(HttpStatus.CREATED))
-				return true;
-		} catch (Exception e) {
-			LOGGER.error("Exception occured at HRMS user creation. Message: " + e.getMessage());
-		}
-
-		return false;
-	}
+	/*
+	 * @Autowired private HrmsProxy hrmsProxy;
+	 * 
+	 * public boolean createUser(CreateUserDTO dto) {
+	 * 
+	 * LOGGER.info("Sending create user request to HRMS");
+	 * 
+	 * try { ResponseEntity<Void> response = hrmsProxy.create(dto);
+	 * 
+	 * LOGGER.info("Recived HRMS create user response with status code: " +
+	 * response.getStatusCode());
+	 * 
+	 * if (response.getStatusCode().equals(HttpStatus.CREATED)) return true; } catch
+	 * (Exception e) {
+	 * LOGGER.error("Exception occured at HRMS user creation. Message: " +
+	 * e.getMessage()); }
+	 * 
+	 * return false; }
+	 */
 
 }

@@ -9,10 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.SmartValidator;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -44,7 +44,7 @@ public class UserController {
 	}
 
 	@PutMapping("/{id}")
-	@Secured("ROLE_ADMIN")
+	//@Secured("ROLE_ADMIN")
 	public ResponseEntity<User> update(@PathVariable("companyId") UUID companyId, @PathVariable("id") UUID id,
 			@Valid @RequestBody UserInfoDTO dto) {
 
@@ -58,21 +58,24 @@ public class UserController {
 	}
 
 	@PatchMapping("/{id}")
-	@Secured("ROLE_ADMIN")
+	//@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> patch(@PathVariable("companyId") UUID companyId, @PathVariable("id") UUID id,
-			@RequestBody Map<String, Object> data) {
+			@RequestBody Map<String, Object> data) throws MethodArgumentNotValidException {
 
-		Errors errors = new BeanPropertyBindingResult(data, "data");
+		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(data, "data");
 
 		for (Entry<String, Object> entry : data.entrySet()) {
 			String key = entry.getKey();
 			Object d = entry.getValue();
 			validator.validateValue(UserInfoDTO.class, key, d, errors);
-			if (errors.hasErrors()) {
-	            return ResponseEntity.badRequest().body(errors.getAllErrors().get(0).getDefaultMessage());
-	        }
 		}
+		
+		if (errors.hasErrors()) {
+			throw new MethodArgumentNotValidException(null, errors);
+        }
 
-		return ResponseEntity.ok(null);
+		User user = userService.patch(id, data);
+		return ResponseEntity.ok(user);
+		
 	}
 }
