@@ -14,9 +14,9 @@ spring:
                 batch_size: 10
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:5432/ou_notification
-        password: postgres
-        username: postgres
+        url: ${DB_URL:jdbc:postgresql://localhost:5430/ou_notification}
+        password: ${DB_PASSWORD:postgres}
+        username: ${DB_USER:postgres}
         hikari:
             connection-timeout: 30000
             idle-timeout: 30000
@@ -39,8 +39,8 @@ spring:
     mail:
       host: smtp.gmail.com
       port: 587
-      username: hcc.hukam@gmail.com
-      password: gbpcwpnaeporviyw
+      username: 
+      password: 
       protocol: smtp
       tls: true
       properties.mail.smtp:

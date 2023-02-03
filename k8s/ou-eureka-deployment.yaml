@@ -15,7 +15,7 @@ spec:
   type: NodePort
   ports:
   - port: 8761
-    nodePort: 30030
+    nodePort: 30032
     targetPort: 8761
     name: ou-eureka
   selector:
@@ -41,7 +41,6 @@ metadata:
   name: ou-eureka
 spec:
   serviceName: ou-eureka
-  # n instances
   replicas: 3
   selector:
     matchLabels:
@@ -70,21 +69,25 @@ spec:
             configMapKeyRef:
               name: ou-eureka-cm
               key: eureka_service_address
-        - name: ENVIRONMENT
-          value: "prod"
-        - name: JVM_OPTS
-          value: "-Xms1g -Xmx1g"
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 8761
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 8761
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
+        # - name: ENVIRONMENT
+        #   value: "prod"
+        # - name: JVM_OPTS
+        #   value: "-Xms1g -Xmx1g"
+        # - name: OU_RWE
+        #   value: true
+        # - name: OU_FR
+        #   value: true  
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 8761
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 10
+        #   timeoutSeconds: 5
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 8761
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 10
+        #   timeoutSeconds: 5

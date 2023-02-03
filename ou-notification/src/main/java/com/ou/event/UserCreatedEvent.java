@@ -6,5 +6,7 @@ import lombok.Data;
 public class UserCreatedEvent {
 
 	private String name;
+	private String password;
 	private String email;
+	private boolean sendPasswordEmail;
 }

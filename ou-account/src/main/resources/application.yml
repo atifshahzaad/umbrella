@@ -6,7 +6,7 @@ spring:
       name: ou-account
     jpa:
       properties:
-#        hibernate.show_sql: true
+        hibernate.show_sql: true
         hibernate.default-schema: ggh_vap
         hibernate:
             generate_statistics: false
@@ -15,7 +15,7 @@ spring:
                 batch_size: 10
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: ${DB_URL:jdbc:postgresql://localhost:5432/ou_account}
+        url: ${DB_URL:jdbc:postgresql://localhost:5430/ou_account}
         password: ${DB_PASSWORD:postgres}
         username: ${DB_USER:postgres}
         hikari:

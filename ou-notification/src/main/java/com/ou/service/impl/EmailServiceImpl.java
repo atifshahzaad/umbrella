@@ -35,7 +35,7 @@ public class EmailServiceImpl implements EmailService {
 			EmailBuilder emailBuilder = new EmailBuilder("Welcome to Umbrella", event.getEmail(),
 					"welcome-password-reset.html");
 			emailBuilder.setValue("subject", "Welcome");
-			//emailBuilder.setValue("content", event.getPassword());
+			emailBuilder.setValue("content", event.getPassword());
 
 			Mail mail = emailBuilder.createMail();
 			boolean sent = sendEmailService.sendMail(mail);

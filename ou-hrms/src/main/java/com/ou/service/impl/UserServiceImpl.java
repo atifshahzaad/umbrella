@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.SmartValidator;
 
 import com.ou.dto.CreateUserDTO;
 import com.ou.event.UserCreatedEvent;
@@ -19,15 +18,10 @@ import com.ou.service.UserService;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	SmartValidator validator;
-	
-	@Autowired
 	private ModelMapper modelMapper;
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
-	
 
 	@Override
 	public User create(CreateUserDTO dto) {
@@ -38,16 +32,13 @@ public class UserServiceImpl implements UserService {
 		}
 		return userRepository.save(user);
 	}
-	
+
 	@Override
 	public User update(UUID userId, Map<String, Object> map) {
 		User user = this.findByIdForReference(userId);
-		
-		
-		
+
 		return null;
 	}
-	
 
 	@Override
 	public User findByIdForReference(UUID id) {
@@ -70,6 +61,5 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 }

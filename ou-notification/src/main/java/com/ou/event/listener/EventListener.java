@@ -16,6 +16,11 @@ public class EventListener {
 	@KafkaListener(topics = "${ou_notification.topic.userCreated}")
     public void handleNotification(UserCreatedEvent event) {
 		System.out.println("#################### " + event.getEmail() + " ############################");
-		emailService.handleUserCreatedEvent(event);
+		if(event.isSendPasswordEmail()) {
+			System.out.println("#################### sending password email ############################");
+			emailService.handleUserCreatedEvent(event);	
+		} else {
+			System.out.println("#################### todo: need to send welcome email ############################");
+		}
     }
 }

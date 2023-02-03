@@ -13,9 +13,15 @@ public class OUGatewaySecurityConfig {
 
 	@Bean
 	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-		http.csrf().disable().authorizeExchange()
-				.pathMatchers(HttpMethod.POST, "/oua/api/v1/company", "/oua/api/v1/auth/**").permitAll().anyExchange()
-				.authenticated().and().oauth2ResourceServer().jwt();
+		http.cors()
+		.and().csrf().disable()
+			.authorizeExchange()
+			.pathMatchers(HttpMethod.POST, "/oua/api/v1/auth/**").permitAll()
+			.pathMatchers("/actuator/**").permitAll()
+			.pathMatchers(HttpMethod.OPTIONS).permitAll()
+			.anyExchange().authenticated()
+		.and()
+		.oauth2ResourceServer().jwt();
 		return http.build();
 	}
 }

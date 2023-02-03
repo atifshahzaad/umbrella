@@ -14,4 +14,6 @@ public interface RoleService {
 	Role findByNameForReference(String name);
 	
 	List<Role> findAll();
+	
+	void delete(UUID id);
 }

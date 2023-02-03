@@ -4,11 +4,30 @@ server:
 spring:
     application:
       name: ou-gateway
+    cloud:
+      gateway:
+        default-filters:
+          - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+        globalcors:
+          corsConfigurations:
+            '[/**]':
+              allowedOriginPatterns: "*"
+              allowedMethods: GET, POST, PUT, PATCH, DELETE, OPTIONS
+              allowedHeaders: "*"
+              exposedHeaders:
+              allowCredentials: true
+              maxAge: 3600  
     security:
       oauth2:
         resourceserver:
           jwt:
             issuer-uri: http://localhost:8080/realms/umbrella
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, prometheus
 
 eureka:
   client:

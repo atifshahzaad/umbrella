@@ -1,5 +1,6 @@
 package com.ou.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -7,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ou.dto.UserSearchResultDTO;
 import com.ou.model.UserRole;
 import com.ou.repository.UserRoleRepository;
 import com.ou.service.UserRoleService;
@@ -31,6 +33,11 @@ public class UserRoleServiceImpl implements UserRoleService {
 	public void delete(UUID id) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public List<UserSearchResultDTO> searchUserByName(String name) {
+		return userRoleRepository.searchUserByName(name.toLowerCase());
 	}
 
 }

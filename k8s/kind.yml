@@ -17,3 +17,17 @@ nodes:
       hostPort: 81
     - containerPort: 30032
       hostPort: 82
+    - containerPort: 30033
+      hostPort: 83
+    - containerPort: 30034
+      hostPort: 84
+    - containerPort: 30035
+      hostPort: 85
+    - containerPort: 30036
+      hostPort: 86
+    - containerPort: 30037
+      hostPort: 87
+    - containerPort: 30038
+      hostPort: 88
+    - containerPort: 30039
+      hostPort: 89

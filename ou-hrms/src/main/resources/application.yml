@@ -15,9 +15,9 @@ spring:
                 batch_size: 10
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:5432/ou_hrms
-        password: postgres
-        username: postgres
+        url: ${DB_URL:jdbc:postgresql://localhost:5430/ou_hrms}
+        password: ${DB_PASSWORD:postgres}
+        username: ${DB_USER:postgres}
         hikari:
             connection-timeout: 30000
             idle-timeout: 30000

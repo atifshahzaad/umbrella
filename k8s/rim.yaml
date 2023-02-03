@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rim
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rim
+  template:
+    metadata:
+      labels:
+        app: rim
+    spec:
+      containers:
+        - name: rim
+          image: rim4a
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8888
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "export KAFKA_BROKER_ID=${HOSTNAME##*-}"]
+          env:
+          - name: KBI
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: KAFKA_BROKERS
+            value: kafka-0.kafka-broker.default.svc.cluster.local:9092, kafka-1.kafka-broker.default.svc.cluster.local:9092, kafka-2.kafka-broker.default.svc.cluster.local:9092
+          - name: TEST_VS
+            value: ${KBI}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rim
+  labels:
+    app: rim
+spec:
+  type: NodePort
+  ports:
+  - port: 8888
+    nodePort: 30030
+    targetPort: 8888
+    name: rim
+  selector:
+    app: rim

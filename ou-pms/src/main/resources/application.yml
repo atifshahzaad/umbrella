@@ -1,0 +1,30 @@
+server:
+    port: 9096
+
+spring:
+    application:
+      name: ou-pms
+    data:
+      mongodb:
+        authentication-database: admin
+        username: ouadmin
+        password: ouadmin
+        database: ou_pms
+        port: 27017
+        host: localhost
+    security:
+      oauth2:
+        resourceserver:
+          jwt:
+            issuer-uri: http://localhost:8080/realms/umbrella
+        client:
+          registration:
+            keycloack:
+              client-id: ou-clinet
+              client-secret: 1hlB0MqynsDme1RBkS9IO7YrH4Onm8qY
+              accessTokenUri: http://localhost:8080/realms/umbrella/protocol/openid-connect/token
+        
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

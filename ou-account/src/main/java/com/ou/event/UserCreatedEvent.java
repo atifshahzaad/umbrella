@@ -17,8 +17,10 @@ public class UserCreatedEvent {
 	private UUID id;
 	private String name;
 	private String email;
+	private String password;
 	private UUID supervisor;
 	private LocalDate joiningDate;
+	private boolean sendPasswordEmail;
 	
 	
 	

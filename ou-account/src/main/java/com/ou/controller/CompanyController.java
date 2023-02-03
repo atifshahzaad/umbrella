@@ -1,10 +1,15 @@
 package com.ou.controller;
 
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +19,7 @@ import com.ou.dto.AddUserDTO;
 import com.ou.dto.CreateCompanyDTO;
 import com.ou.model.Company;
 import com.ou.service.CompanyService;
+import com.ou.util.OuAccountUtil;
 
 @RestController
 @RequestMapping("oua/api/v1/company")
@@ -37,8 +43,10 @@ public class CompanyController {
 	}
 
 	@PostMapping("/user")
-	public ResponseEntity<Void> addUser(@RequestBody AddUserDTO dto) {
-		companyService.addUser(dto);
+	@Secured("ROLE_ADMIN")
+	public ResponseEntity<Void> addUser(@RequestBody AddUserDTO dto, @AuthenticationPrincipal Jwt jwt) {
+		UUID userId = OuAccountUtil.getId(jwt.getSubject());
+		companyService.addUser(userId, dto);
 		return ResponseEntity.created(null).build();
 	}
 	

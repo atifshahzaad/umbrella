@@ -12,5 +12,5 @@ public interface CompanyService {
 	
 	Company findCompanyByIdForReference(UUID id);
 	
-	void addUser(AddUserDTO dto);
+	void addUser(UUID userId, AddUserDTO dto);
 }

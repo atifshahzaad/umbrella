@@ -43,6 +43,11 @@ public class User extends Thing implements Serializable {
 		this.email = email;
 	}
 	
+	public User(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
+	
 	public void copyFromUserInfoDTO(UserInfoDTO dto) {
 		this.firstName = dto.getFirstName();
 		this.middleName = dto.getMiddleName();
