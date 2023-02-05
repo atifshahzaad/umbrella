@@ -28,23 +28,36 @@ spring:
             max-lifetime: 2000000
     kafka:
       bootstrap-servers: localhost:8097, localhost:8098, localhost:8099
-      template:
-        default-topic: ou-user-created
       properties:
       #Server host name verification is disabled by setting ssl.endpoint.identification.algorithm to an empty string
         ssl.endpoint.identification.algorithm:
+      producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       consumer:
         group-id: ou-hrms
         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
         properties:
             spring.json.trusted.packages: "*"
+    security:
+      oauth2:
+        resourceserver:
+          jwt:
+            issuer-uri: http://localhost:8080/realms/umbrella
+        client:
+          registration:
+            keycloack:
+              client-id: ou-clinet
+              client-secret: 1hlB0MqynsDme1RBkS9IO7YrH4Onm8qY
+              accessTokenUri: http://localhost:8080/realms/umbrella/protocol/openid-connect/token
             
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
       
-ou_hrms:
+ou-hrms:
     topic:
       userCreated: ou-user-created
+      userUpdated: ou-user-updated

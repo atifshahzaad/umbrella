@@ -39,6 +39,9 @@ public class OUGatewayConfig {
 				.route("oupms",
 						r -> r.path("/oupms/**")
 						.uri("lb://OU-PMS"))
+				.route("ouh",
+						r -> r.path("/ouh/**")
+						.uri("lb://OU-HRMS"))
 				.build();
 	}
 }

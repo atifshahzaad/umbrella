@@ -23,8 +23,21 @@ spring:
               client-id: ou-clinet
               client-secret: 1hlB0MqynsDme1RBkS9IO7YrH4Onm8qY
               accessTokenUri: http://localhost:8080/realms/umbrella/protocol/openid-connect/token
+    kafka:
+      bootstrap-servers: localhost:8097, localhost:8098, localhost:8099
+      properties:
+      #Server host name verification is disabled by setting ssl.endpoint.identification.algorithm to an empty string
+        ssl.endpoint.identification.algorithm:
+        #"[spring.json.type.mapping]": project:com.ou.project.Project
+      producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
         
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+      
+ou-pms:
+    topic:
+      projectCreated: ou-project-created

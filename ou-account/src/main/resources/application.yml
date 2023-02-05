@@ -71,3 +71,5 @@ ou_account:
     admin_role: ADMIN
     topic:
       userCreated: ou-user-created
+      userNameUpdated: ou-user-name-updated
+      userRoleUpdated: ou-user-role-updated

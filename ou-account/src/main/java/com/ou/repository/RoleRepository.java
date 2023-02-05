@@ -13,9 +13,9 @@ import com.ou.model.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, UUID> {
 
-	@Query("SELECT new com.ou.model.Role(r.id) FROM Role r WHERE r.id=:id")
+	@Query("SELECT new com.ou.model.Role(r.id, r.name) FROM Role r WHERE r.id=:id")
 	Optional<Role> findByIdForReference(@Param("id") UUID id);
 
-	@Query("SELECT new com.ou.model.Role(r.id) FROM Role r WHERE r.name=:name")
+	@Query("SELECT new com.ou.model.Role(r.id, r.name) FROM Role r WHERE r.name=:name")
 	Optional<Role> findByNameForReference(@Param("name") String name);
 }

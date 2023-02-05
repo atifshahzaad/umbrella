@@ -14,7 +14,9 @@ import {
     CFormInput,
     CFormLabel,
     CCardFooter,
-    CAlert
+    CToast,
+    CToastBody,
+    CToastClose,
 } from '@coreui/react'
 import InviteUser from '../umbrella/InviteUser'
 import Role from '../umbrella/Role'
@@ -32,31 +34,32 @@ const Dashboard = () => {
     const [clonedUser, setClonedUser] = useState(null)
     const [updatedUser, setUpdatedUser] = useState({})
     const [updatBtn, setUpdatBtn] = useState(true)
+    const [showTimeOutToast, setShowTimeOutToast] = useState(false)
+
+
     useEffect(() => {
         getUserDetail()
 
     }, []);
 
     const getUserDetail = async () => {
+        setIsLoading(true);
         try {
             const { status, data } = await userService.getMyDetail();
-            console.log(status)
-            if (status === 401) {
+            if (status === 200 && !data.regCompleted) {
+                navigate("/register");
+                return;
+            }
 
-                setIsLoading(false)
-                navigate("/login")
-            }
-            else {
-                setUser(data)
-                setClonedUser(data)
-            }
+            setUser(data);
+            setClonedUser(data);
         } catch (error) {
-            console.log(error);
+            setShowTimeOutToast(true)
+            navigate("/login");
         }
 
-        setIsLoading(false)
-
-    }
+        setIsLoading(false);
+    };
 
 
     const closeInviteUserModal = () => {
@@ -86,7 +89,7 @@ const Dashboard = () => {
 
     const update = async () => {
         try {
-            const status = await userService.update(user.id, updatedUser);
+            const status = await userService.update(updatedUser);
             console.log(status)
         } catch (error) {
             console.log(error)
@@ -100,8 +103,18 @@ const Dashboard = () => {
 
     return (
         <>
-
             <CRow>
+                {showTimeOutToast ? <CToast
+                    autohide={false}
+                    color="primary"
+                    className="text-white align-items-center"
+                    visible={true}
+                >
+                    <div className="d-flex">
+                        <CToastBody>Your session expired please login again.</CToastBody>
+                        <CToastClose className="me-2 m-auto" white />
+                    </div>
+                </CToast> : ''}
                 <CCol xs={12}>
                     <CCard className="mb-4">
                         <CCardHeader>

@@ -9,5 +9,5 @@ import lombok.Data;
 public class AddUserDTO {
 	private String email;
 	private List<UUID> roles;
-	private UUID supervisior;
+	private UUID supervisor;
 }

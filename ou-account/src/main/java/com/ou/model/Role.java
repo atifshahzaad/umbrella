@@ -24,5 +24,10 @@ public class Role extends Thing implements Serializable {
 	public Role(UUID id) {
 		super.setId(id);
 	}
+	
+	public Role(UUID id, String name) {
+		super.setId(id);
+		this.name = name;
+	}
 
 }

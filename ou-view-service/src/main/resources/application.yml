@@ -1,0 +1,50 @@
+server:
+    port: 8082
+
+spring:
+    application:
+      name: ou-view-service
+    data:
+      mongodb:
+        authentication-database: admin
+        username: ouadmin
+        password: ouadmin
+        database: ou_view
+        port: 27017
+        host: localhost
+    security:
+      oauth2:
+        resourceserver:
+          jwt:
+            issuer-uri: http://localhost:8080/realms/umbrella
+        client:
+          registration:
+            keycloack:
+              client-id: ou-clinet
+              client-secret: 1hlB0MqynsDme1RBkS9IO7YrH4Onm8qY
+              accessTokenUri: http://localhost:8080/realms/umbrella/protocol/openid-connect/token
+    kafka:
+      bootstrap-servers: localhost:8097, localhost:8098, localhost:8099
+      properties:
+        ssl.endpoint.identification.algorithm:
+      consumer:
+        group-id: ou-view-service
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+        properties:
+            spring.json.trusted.packages: "*"
+            #"[spring.json.type.mapping]": project:com.ou.model.Project
+
+            
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+      
+ou-view-service:
+    topic:
+      userCreated: ou-user-created
+      userUpdated: ou-user-updated
+      userNameUpdated: ou-user-name-updated
+      userRoleUpdated: ou-user-role-updated
+      projectCreated: ou-project-created

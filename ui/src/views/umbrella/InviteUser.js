@@ -68,6 +68,12 @@ const InviteUser = ({ visible, closeInviteUserModal }) => {
         }
     }
 
+    const onSupervisorSelected = (id, name) => {
+        setSupervisor(id);
+        setSupervisors([]);
+        setSearchKey(name)
+    }
+
     return (
         <>
             <CModal size="lg" alignment="center" visible={visible} onClose={closeInviteUserModal}>
@@ -101,7 +107,7 @@ const InviteUser = ({ visible, closeInviteUserModal }) => {
                             />
                             <CListGroup>
                                 {supervisors.map((item, index) => (
-                                    <CListGroupItem key={index} component="a" href="#" onClick={ () => setSupervisor(item.id)}>
+                                    <CListGroupItem key={index} component="a" href="#" onClick={ () => onSupervisorSelected(item.id, item.name)}>
                                         {item.name} | {item.role}
                                     </CListGroupItem>))}
 
@@ -123,10 +129,10 @@ const InviteUser = ({ visible, closeInviteUserModal }) => {
                     </CForm>
                 </CModalBody>
                 <CModalFooter>
-                    <CButton color="secondary" onClick={() => closeInviteUserModal()}>
+                    <CButton color="secondary" onClick={closeInviteUserModal}>
                         Close
                     </CButton>
-                    <CButton color="primary" onClick={() => invite()}>Invite</CButton>
+                    <CButton color="primary" onClick={invite}>Invite</CButton>
                 </CModalFooter>
             </CModal>
         </>

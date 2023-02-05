@@ -34,6 +34,18 @@ public class User implements Serializable {
 	@Column(name = "id")
 	private UUID id;
 
+	@Column(name="first_name", nullable = true)
+	private String firstName;
+	
+	@Column(name="middle_name", nullable = true)
+	private String middleName;
+	
+	@Column(name="last_name", nullable = true)
+	private String lastName;
+	
+	@Column(name="email", nullable = false, unique = true)
+	private String email;
+	
 	@Column(name = "serial_number", nullable = false)
 	private int serialNumber;
 
@@ -64,7 +76,6 @@ public class User implements Serializable {
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 	
-	
 	@Basic(optional = false)
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
@@ -85,6 +96,12 @@ public class User implements Serializable {
 
 	public User(UUID id, LocalDate joiningDate) {
 		this.id = id;
+		this.joiningDate = joiningDate;
+	}
+
+	public User(UUID id, String email, LocalDate joiningDate) {
+		this.id = id;
+		this.email = email;
 		this.joiningDate = joiningDate;
 	}
 

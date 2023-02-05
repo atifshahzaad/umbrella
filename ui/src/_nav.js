@@ -27,6 +27,12 @@ const _nav = [
     },
   },
   {
+    component: CNavItem,
+    name: 'PRMS',
+    to: '/prms/home',
+    icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
+  },
+  {
     component: CNavTitle,
     name: 'Theme',
   },

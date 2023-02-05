@@ -13,6 +13,8 @@ public interface UserService {
 	
 	User update(UUID userId, Map<String, Object> map);
 	
+	User patch(UUID userId, Map<String, Object> data);
+	
 	void create(UserCreatedEvent event);
 	
 	User findByIdForReference(UUID id);

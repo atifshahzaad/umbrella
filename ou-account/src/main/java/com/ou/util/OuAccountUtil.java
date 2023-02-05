@@ -17,9 +17,10 @@ public class OuAccountUtil {
 	}
 
 	public static String generateRandomPassword() {
-		String text = UUID.randomUUID().toString();
-		String[] arr = text.split("-");
-		return arr[arr.length - 1];
+		return "Abc123";
+//		String text = UUID.randomUUID().toString();
+//		String[] arr = text.split("-");
+//		return arr[arr.length - 1];
 	}
 	
 	public static UUID getId(String subject) {

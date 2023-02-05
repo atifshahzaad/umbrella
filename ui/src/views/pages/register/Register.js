@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -12,9 +13,25 @@ import {
   CRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
+import { cilUser } from '@coreui/icons'
+
+import { update } from '../../../services/userService'
 
 const Register = () => {
+
+  const navigate = useNavigate();
+  const [firstName, setFirstName] = useState('')
+  const [middleName, setMiddleName] = useState('')
+  const [lastName, setLastName] = useState('')
+
+  const save = async() => {
+    const status =  await update({ firstName, middleName, lastName})
+    if(status === 200) {
+      navigate("/dashboard")
+    }
+  }
+
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -23,40 +40,33 @@ const Register = () => {
             <CCard className="mx-4">
               <CCardBody className="p-4">
                 <CForm>
-                  <h1>Register</h1>
-                  <p className="text-medium-emphasis">Create your account</p>
+                  <h1>Complete your account</h1>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilUser} />
                     </CInputGroupText>
-                    <CFormInput placeholder="Username" autoComplete="username" />
-                  </CInputGroup>
-                  <CInputGroup className="mb-3">
-                    <CInputGroupText>@</CInputGroupText>
-                    <CFormInput placeholder="Email" autoComplete="email" />
+                    <CFormInput placeholder="First name" value={firstName} onChange={(e) => {
+                      setFirstName(e.target.value)
+                    }} />
                   </CInputGroup>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
-                      <CIcon icon={cilLockLocked} />
+                      <CIcon icon={cilUser} />
                     </CInputGroupText>
-                    <CFormInput
-                      type="password"
-                      placeholder="Password"
-                      autoComplete="new-password"
-                    />
+                    <CFormInput placeholder="Middle name" value={middleName} onChange={(e) => {
+                                    setMiddleName(e.target.value)
+                                }}/>
                   </CInputGroup>
-                  <CInputGroup className="mb-4">
+                  <CInputGroup className="mb-3">
                     <CInputGroupText>
-                      <CIcon icon={cilLockLocked} />
+                      <CIcon icon={cilUser} />
                     </CInputGroupText>
-                    <CFormInput
-                      type="password"
-                      placeholder="Repeat password"
-                      autoComplete="new-password"
-                    />
+                    <CFormInput placeholder="Last name" value={lastName} onChange={(e) => {
+                                    setLastName(e.target.value)
+                                }}/>
                   </CInputGroup>
                   <div className="d-grid">
-                    <CButton color="success">Create Account</CButton>
+                    <CButton color="success" onClick={save}>Save</CButton>
                   </div>
                 </CForm>
               </CCardBody>

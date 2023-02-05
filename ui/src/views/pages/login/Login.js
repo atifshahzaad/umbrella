@@ -22,19 +22,28 @@ const Login = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [loginFailed, setLoginFailed] = useState(false)
+  const [loginFailedMessage, setLoginFailedMessage] = useState('')
 
-  const handleSubmit = async(event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    const token = await authService.login(username, password)
-    if (token.access_token) {
-      storeService.put('access_token', token.access_token)
-      storeService.put('refresh_token', token.refresh_token)
-      storeService.put('expires_in', token.expires_in)
-      storeService.put('refresh_expires_in', token.refresh_expires_in)
-      storeService.put('issued_at', new Date())
-      storeService.put('authenticated', true)
-      navigate("/dashboard")
+
+    try {
+      const token = await authService.login(username, password)
+      if (token.access_token) {
+        storeService.put('access_token', token.access_token)
+        storeService.put('refresh_token', token.refresh_token)
+        storeService.put('expires_in', token.expires_in)
+        storeService.put('refresh_expires_in', token.refresh_expires_in)
+        storeService.put('issued_at', new Date())
+        storeService.put('authenticated', true)
+        navigate("/dashboard")
+      }
+    } catch (error) {
+      setLoginFailed(true)
+      setLoginFailedMessage(error.response.data.message)
     }
+
   }
 
   return (
@@ -74,6 +83,7 @@ const Login = () => {
                         }}
                       />
                     </CInputGroup>
+                    { loginFailed ? <p style={{color:'red'}}>{loginFailedMessage}</p>: ''}
                     <CRow>
                       <CCol xs={6}>
                         <CButton type="submit" color="primary" className="px-4">

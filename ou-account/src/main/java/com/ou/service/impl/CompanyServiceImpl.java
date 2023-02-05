@@ -1,18 +1,23 @@
 package com.ou.service.impl;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.dto.AddUserDTO;
 import com.ou.dto.CreateCompanyDTO;
+import com.ou.dto.RoleDTO;
 import com.ou.event.UserCreatedEvent;
+import com.ou.event.producer.EventProducer;
 import com.ou.exceptions.ResourceNotFoundException;
 import com.ou.model.Company;
 import com.ou.model.Country;
@@ -23,7 +28,6 @@ import com.ou.model.UserRole;
 import com.ou.repository.CompanyRepository;
 import com.ou.service.CompanyService;
 import com.ou.service.CountryService;
-import com.ou.service.HRMSEventService;
 import com.ou.service.RoleService;
 import com.ou.service.UserDetailService;
 import com.ou.service.UserRoleService;
@@ -34,6 +38,9 @@ import com.ou.util.OuAccountUtil;
 public class CompanyServiceImpl implements CompanyService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyServiceImpl.class);
+
+	@Value("${ou_account.topic.userCreated}")
+	private String userCreatedTopic;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -57,15 +64,10 @@ public class CompanyServiceImpl implements CompanyService {
 	private UserRoleService userRoleService;
 
 	@Autowired
-	private HRMSEventService hrmsEventService;
-
-	/*
-	 * @Autowired private HRMSEventService hrmsEventService;
-	 */
-
+	private PasswordEncoder passwordEncoder;
 	
-	 @Autowired private PasswordEncoder passwordEncoder;
-	 
+	@Autowired
+	private EventProducer eventProducer;
 
 	@Override
 	@Transactional
@@ -101,13 +103,11 @@ public class CompanyServiceImpl implements CompanyService {
 		LOGGER.info("company creation ended");
 
 		UserCreatedEvent event = UserCreatedEvent.builder()
-				.id(persistedUser.getId())
+				.userId(persistedUser.getId())
 				.email(persistedUser.getEmail())
-				.name(persistedUser.getFirstName() + " " + persistedUser.getMiddleName() + " " + persistedUser.getLastName())
-				.sendPasswordEmail(false)
 				.build();
 
-		hrmsEventService.sendUserCreatedEvent(event);
+		eventProducer.send(userCreatedTopic, event);
 
 //		CreateUserDTO cDto = new CreateUserDTO();
 //		cDto.setId(persistedUser.getId());
@@ -140,23 +140,24 @@ public class CompanyServiceImpl implements CompanyService {
 		UserDetail userDetail = new UserDetail(persistedUser, company);
 		userDetailService.create(userDetail);
 
+		Set<RoleDTO> roles = new HashSet<>();
 		dto.getRoles().forEach((id -> {
 			Role role = roleService.findByIdForReference(id);
 			UserRole userRole = new UserRole(persistedUser, role);
 			userRoleService.create(userRole);
+			roles.add(new RoleDTO(role.getId(), role.getName()));
 		}));
 		
-		UserCreatedEvent event = UserCreatedEvent
-				.builder()
-				.id(persistedUser.getId())
+		UserCreatedEvent event = UserCreatedEvent.builder()
+				.userId(persistedUser.getId())
+				.supervisor(dto.getSupervisor())
 				.email(persistedUser.getEmail())
-				.password(password)
-				.name(persistedUser.getFirstName() + " " + persistedUser.getMiddleName() + " " + persistedUser.getLastName())
-				.supervisor(dto.getSupervisior())
-				.sendPasswordEmail(true)
+				.createdAt(persistedUser.getCreatedAt())
+				.updatedAt(persistedUser.getUpdatedAt())
+				.roles(roles)
 				.build();
 
-		hrmsEventService.sendUserCreatedEvent(event);
+		eventProducer.send(userCreatedTopic, event);
 
 	}
 

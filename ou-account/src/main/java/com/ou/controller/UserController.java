@@ -88,10 +88,12 @@ public class UserController {
 		return ResponseEntity.ok(user);
 	}
 
-	@PatchMapping("/{id}")
-	public ResponseEntity<User> patch(@PathVariable("id") UUID id, @RequestBody Map<String, Object> data)
+	@PatchMapping
+	public ResponseEntity<User> patch(@RequestBody Map<String, Object> data, @AuthenticationPrincipal Jwt jwt)
 			throws MethodArgumentNotValidException {
 
+		UUID userId = OuAccountUtil.getId(jwt.getSubject());
+		
 		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(data, "data");
 
 		for (Entry<String, Object> entry : data.entrySet()) {
@@ -103,8 +105,8 @@ public class UserController {
 		if (errors.hasErrors()) {
 			throw new MethodArgumentNotValidException(null, errors);
 		}
-
-		User user = userService.patch(id, data);
+		
+		User user = userService.patch(userId, data);
 		return ResponseEntity.ok(user);
 
 	}

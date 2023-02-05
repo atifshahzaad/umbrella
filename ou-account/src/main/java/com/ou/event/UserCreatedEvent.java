@@ -1,7 +1,10 @@
 package com.ou.event;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
+
+import com.ou.dto.RoleDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,15 +15,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class UserCreatedEvent {
+public class UserCreatedEvent implements Event{
 
-	private UUID id;
-	private String name;
-	private String email;
-	private String password;
+	private UUID userId;
 	private UUID supervisor;
-	private LocalDate joiningDate;
-	private boolean sendPasswordEmail;
+	
+	private String email;
+	
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
+	
+	private Set<RoleDTO> roles;
 	
 	
 	

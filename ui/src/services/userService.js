@@ -10,8 +10,8 @@ const invite = async (data) => {
     return status;
 }
 
-const update = async (id, data) => {
-    const { status } = await http.patch(`oua/api/v1/user/${id}`, data);
+const update = async (data) => {
+    const { status } = await http.patch(`ouh/api/v1/user`, data);
     return status;
 }
 
